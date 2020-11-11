@@ -1,0 +1,37 @@
+-- Created Quick App and choose Thermostat Cool type
+-- Edit self.ZXTID to your ZXT ID
+
+function QuickApp:onInit()
+    self:debug("onInit")
+    self.ACmode = "Cool";
+    self.ACTemp = 25; 
+    self.ZXTID = 293;
+
+    -- set supported modes for thermostat
+    self:updateProperty("supportedThermostatModes", {"Off", "Cool", "Auto"})
+
+    -- setup default values
+    self:updateProperty("thermostatMode", "Cool")
+    self:updateProperty("coolingThermostatSetpoint", 23)
+end
+
+-- handle action for mode change 
+function QuickApp:setThermostatMode(mode)
+    self:updateProperty("thermostatMode", mode)
+    self:debug("Current Mode : " .. mode)
+    self.ACmode = mode;
+    fibaro.call(self.ZXTID, "setThermostatMode", self.ACmode)
+    fibaro.call(self.ZXTID, "setCoolingThermostatSetpoint", self.ACTemp)
+end
+
+-- handle action for setting set point for cooling
+function QuickApp:setCoolingThermostatSetpoint(value) 
+    self:updateProperty("coolingThermostatSetpoint", value)
+    print("ZXT ID : " .. self.ZXTID)
+    self:debug("Current Temp : " .. value)
+    self:debug("Set Mode : " .. self.ACmode);
+    self.ACTemp = value;
+    
+    fibaro.call(self.ZXTID, "setThermostatMode", self.ACmode)
+    fibaro.call(self.ZXTID, "setCoolingThermostatSetpoint", value)
+end
