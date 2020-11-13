@@ -1,0 +1,46 @@
+=== DECLARATION ===
+
+{
+  conditions = { {
+      id = xx, -- Motion ID
+      isTrigger = true,
+      operator = "==",
+      property = "value",
+      type = "device",
+      value = true
+    }, {
+      id = xx, -- Motion2 ID
+      isTrigger = true,
+      operator = "==",
+      property = "value",
+      type = "device",
+      value = true
+    } },
+  operator = "any"
+}
+
+=== ACTIONS ===
+
+motion = 281; -- Motion ID
+motion2 = 302; -- Motion2 ID
+relay = 290; -- Relay ID
+delay = 10; -- time to close in second
+
+local i = 0;
+function turnOff(time)
+  while i < time do 
+    fibaro.sleep(1000)
+    if fibaro.getValue(motion, "value") or fibaro.getValue(motion2, "value") then i=0 end
+    if fibaro.getValue(relay, "value") == false then i=time end
+    print(i);
+    i = i+1;
+  end
+  if fibaro.getValue(motion, "value") == false and fibaro.getValue(motion2, "value") == false
+  then fibaro.call(relay, "turnOff") end
+end
+
+if fibaro.getValue(motion, "value") or fibaro.getValue(motion2, "value") then
+  fibaro.call(relay, "turnOn")
+  print("turnOn")
+  turnOff(delay)
+end
