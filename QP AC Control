@@ -21,7 +21,9 @@ function QuickApp:setThermostatMode(mode)
     self:debug("Current Mode : " .. mode)
     self.ACmode = mode;
     fibaro.call(self.ZXTID, "setThermostatMode", self.ACmode)
-    fibaro.call(self.ZXTID, "setCoolingThermostatSetpoint", self.ACTemp)
+    if (mode ~= "Off") then
+        fibaro.call(self.ZXTID, "setCoolingThermostatSetpoint", self.ACTemp)
+    end
 end
 
 -- handle action for setting set point for cooling
