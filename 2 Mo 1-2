@@ -1,0 +1,42 @@
+=== DECLARATION ===
+
+{
+  conditions = { {
+      id = 684, -- Motion ID
+      isTrigger = true,
+      operator = "==",
+      property = "value",
+      type = "device",
+      value = true,
+    } },
+  operator = "all"
+}
+
+=== ACTIONS ===
+
+motion = 684; -- Motion ID
+motion2 = 690; -- Motion2 ID
+relay = 131; -- Relay ID
+delay = 20; -- time to close in second
+
+local i = 0;
+local j = 0;
+function func(time)
+  while i < time do 
+    fibaro.sleep(1000)
+    i = i+1;
+  end
+  if fibaro.getValue(motion, "value") == false and fibaro.getValue(motion2, "value") == false
+  then fibaro.call(relay, "turnOff") end
+end
+
+if fibaro.getValue(motion, "value") then
+    while j < 5 do 
+        fibaro.sleep(1000)
+        if fibaro.getValue(motion2, "value") then
+            func(delay)
+        end
+        j = j+1;
+    end
+    
+end
