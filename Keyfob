@@ -1,0 +1,22 @@
+{
+  id = 727,
+  isTrigger = true,
+  operator = "anyValue",
+  property = "centralSceneEvent",
+  type = "device"
+}
+
+print(json.encode(sourceTrigger.value['keyId']))
+if json.encode(sourceTrigger.value['keyId']) == "1" then
+    fibaro.call(154, "toggle")
+elseif json.encode(sourceTrigger.value['keyId']) == "2" then
+    fibaro.call(131, "toggle")
+elseif json.encode(sourceTrigger.value['keyId']) == "3" then
+    fibaro.call(136, "toggle")
+elseif json.encode(sourceTrigger.value['keyId']) == "4" then
+    fibaro.call(188, "toggle")
+elseif json.encode(sourceTrigger.value['keyId']) == "5" then
+    fibaro.call(83, "close")
+else 
+    fibaro.call(83, "open")
+end
